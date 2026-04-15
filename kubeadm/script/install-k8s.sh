@@ -89,7 +89,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 # IMPORTANT: Force correct IP(Vagrant)
 IP=$(hostname -I | awk '{print $2}')
 
-sudo sed -i "s|KUBELET_EXTRA_ARGS=\"|KUBELET_EXTRA_ARGS=\"--node-ip=$IP |" /etc/default/kubelet
+sudo sed -i "s|^KUBELET_EXTRA_ARGS=.*|KUBELET_EXTRA_ARGS=--node-ip=$IP|" /etc/default/kubelet
 
 sudo systemctl daemon-reexec
 sudo systemctl restart kubelet
