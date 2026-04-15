@@ -1,0 +1,19 @@
+- name: setup Kubernetes cluster
+  hosts: all
+  become: true
+  roles:
+    - common
+    - containerd
+    - kuernetes
+
+- name: initlaize the Kubernetes cluster
+  hosts: master
+  become: true
+  roles:
+    - master
+
+- name: Join worker nodes to the cluster
+  hosts: worker
+  become: true
+  roles:
+    - worker
