@@ -1,0 +1,11 @@
+k8s_version: "v1.35"
+
+pod_network_cidr: "10.244.0.0/16"
+
+apiserver_advertise_address: "192.168.56.10"
+
+install_kubectl: false
+
+ansible_user_name: "vagrant"
+
+kubeconfig_path: "/home/vagrant/.kube/config"
