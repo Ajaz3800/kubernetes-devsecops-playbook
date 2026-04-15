@@ -113,6 +113,16 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 ---
 
+#### Set node IP to private network (eth1 in Vagrant)
+
+```bash
+IP=$(hostname -I | awk '{print $2}')
+
+sudo sed -i "s|KUBELET_KUBEADM_ARGS=\"|KUBELET_KUBEADM_ARGS=\"--node-ip=$IP |" /var/lib/kubelet/kubeadm-flags.env
+
+sudo systemctl daemon-reexec
+sudo systemctl restart kubelet
+```
 ## 🛠️ Automation Options
 
 ### 🔹 Bash Script
