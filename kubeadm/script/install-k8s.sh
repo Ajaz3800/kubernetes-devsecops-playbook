@@ -86,6 +86,14 @@ mkdir -p $HOME/.kube
 sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
+# IMPORTANT: Force correct IP(Vagrant)
+IP=$(hostname -I | awk '{print $2}')
+
+sudo sed -i "s|KUBELET_EXTRA_ARGS=\"|KUBELET_EXTRA_ARGS=\"--node-ip=$IP |" /etc/default/kubelet
+
+sudo systemctl daemon-reexec
+sudo systemctl restart kubelet
+
 # ===== OPTIONAL COPY =====
 if [ "$COPY_KUBECONFIG" = "yes" ]; then
   scp /etc/kubernetes/admin.conf user@localmachine:/tmp/config
