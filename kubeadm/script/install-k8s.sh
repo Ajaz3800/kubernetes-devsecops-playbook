@@ -7,6 +7,7 @@ K8S_VERSION=${1:-"v1.35"}
 INSTALL_KUBECTL=${2:-"no"}
 COPY_KUBECONFIG=${3:-"no"}
 MASTER_IP=${4:-"192.168.56.10"}
+CIDR=${5:-"10.0.0.0/16"}
 
 echo "Using Kubernetes Version: $K8S_VERSION"
 
@@ -78,7 +79,7 @@ sudo sysctl --system
 # ===== INIT CLUSTER =====
 sudo kubeadm init \
 --apiserver-advertise-address=$MASTER_IP \
---pod-network-cidr "10.244.0.0/16" \
+--pod-network-cidr=$CIDR \
 --upload-certs
 
 # ===== KUBECONFIG =====
