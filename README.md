@@ -118,7 +118,7 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```bash
 IP=$(hostname -I | awk '{print $2}')
 
-sudo sed -i "s|KUBELET_KUBEADM_ARGS=\"|KUBELET_KUBEADM_ARGS=\"--node-ip=$IP |" /var/lib/kubelet/kubeadm-flags.env
+sudo sed -i "s|^KUBELET_EXTRA_ARGS=.*|KUBELET_EXTRA_ARGS=--node-ip=$IP|" /etc/default/kubelet
 
 sudo systemctl daemon-reexec
 sudo systemctl restart kubelet
