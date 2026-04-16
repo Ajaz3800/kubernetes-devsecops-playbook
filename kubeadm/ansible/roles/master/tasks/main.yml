@@ -1,13 +1,19 @@
+- name: Check if cluster already initialized
+  stat:
+    path: /etc/kubernetes/admin.conf
+  register: kube_config
+
 - name: Initialize Kubernetes cluster
   command: kubeadm init \
     --apiserver-advertise-address={{ apiserver_advertise_address }} \
     --pod-network-cidr={{ pod_network_cidr }} \
     --upload-certs
+  when: not kube_config.stat.exists
 
 - name: Ensure .kube directory exists locally
   delegate_to: localhost
   run_once: true
-  become: true
+  become: false
   file:
     path: "{{ lookup('env','HOME') }}/.kube"
     state: directory
@@ -22,7 +28,7 @@
 - name: Fix kubeconfig permissions
   delegate_to: localhost
   run_once: true
-  become: true
+  become: false
   file:
     path: "{{ lookup('env','HOME') }}/.kube/config"
     mode: '0600'
@@ -31,7 +37,6 @@
   command: kubeadm token create --print-join-command
   register: join_command
 
-- name: Save join command
-  copy:
-    content: "{{ join_command.stdout }}"
-    dest: /tmp/join-command.sh
+- name: Store join command globally
+  set_fact:
+    kube_join_command: "{{ join_command.stdout }}"
