@@ -1,8 +1,2 @@
-- name: Copy join command from master
-  fetch:
-    src: /tmp/join-command.sh
-    dest: /tmp/join-command.sh
-    flat: yes
-
 - name: Join worker to cluster
-  command: sh /tmp/join-command.sh
+  command: "{{ hostvars[groups['master'][0]].kube_join_command }} --ignore-preflight-errors=all"
